@@ -1,20 +1,23 @@
 use std::env;
 use warp::Filter;
-use std::net::SocketAddr;
-
 
 #[tokio::main]
 async fn main() {
-    // let port =  
-    // println!("{}", port);
-    //format!("The number is {}", 1);
     let port = env::var("PORT")
         .map(|port| port.parse().unwrap_or(4000))
         .unwrap_or(4000);
-    let server_details = format!("127.0.0.1:{}",port);
-    let server: SocketAddr = server_details
-    .parse()
-    .expect("Unable to parse socket address");
+    let enviroment = env::var("ENVIRONMENT").unwrap_or("DEVELOPMENT".to_string());
+    
+    let server = match enviroment.as_str() {
+        "PRODUCTION" => {
+            println!("production");
+            ([0, 0, 0, 0], port)
+        },
+        "DEVELOPMENT" | _ => {
+            println!("development");
+            ([127, 0, 0, 1], port)
+        },
+    } ;
 
     // GET /
     let hello_world = warp::path::end().map(|| "Hello, World at root!");
