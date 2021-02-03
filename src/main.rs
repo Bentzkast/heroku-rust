@@ -9,7 +9,7 @@ async fn main() {
     // println!("{}", port);
     //format!("The number is {}", 1);
     let port = env::var("PORT")
-        .map(|port| port.parse::<i32>().unwrap_or(4000))
+        .map(|port| port.parse().unwrap_or(4000))
         .unwrap_or(4000);
     let server_details = format!("127.0.0.1:{}",port);
     let server: SocketAddr = server_details
